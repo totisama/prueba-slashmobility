@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import BackLink from '@/components/BackLink/BackLink';
 import Page from '@/components/Page/Page';
+import Range from '@/components/Range/Range';
 import { loadRangeLimits } from '@/lib/range-api';
 
 async function RangeLimits() {
@@ -11,9 +12,11 @@ async function RangeLimits() {
   }
 
   return (
-    <p>
-      Minimum: {limits.min} — Maximum: {limits.max}
-    </p>
+    <Range
+      mode='continuous'
+      min={limits.min}
+      max={limits.max}
+    />
   );
 }
 

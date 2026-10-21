@@ -1,0 +1,30 @@
+.range {
+  margin-top: 16px;
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+}
+
+.track {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 4px;
+  margin: 16px 0;
+  background: #22201e;
+}
+
+.handle {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #22201e;
+  border-radius: 50%;
+  background: #f7f6f3;
+}
+
+.hint {
+  color: #5f5a55;
+  font-size: 0.875rem;
+}
