@@ -7,6 +7,12 @@
   justify-content: space-between;
 }
 
+.labels > :last-child {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
 .track {
   display: flex;
   justify-content: space-between;

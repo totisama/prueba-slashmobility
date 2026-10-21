@@ -4,6 +4,7 @@
   --color-text-muted: #5f5a55;
   --color-accent: #6b5141;
   --color-border: #d8d4cf;
+  --color-error: #b42318;
 }
 
 * {
