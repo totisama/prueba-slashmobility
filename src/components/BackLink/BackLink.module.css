@@ -1,15 +1,15 @@
 .link {
   display: inline-block;
   margin-bottom: 2rem;
-  color: #5f5a55;
+  color: var(--color-text-muted);
   text-decoration: none;
 }
 
 .link:hover {
-  color: #6b5141;
+  color: var(--color-accent);
 }
 
 .link:focus-visible {
-  outline: 2px solid #6b5141;
+  outline: 2px solid var(--color-accent);
   outline-offset: 4px;
 }

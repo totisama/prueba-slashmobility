@@ -12,5 +12,5 @@
 
 .page > p {
   margin: 0;
-  color: #5f5a55;
+  color: var(--color-text-muted);
 }

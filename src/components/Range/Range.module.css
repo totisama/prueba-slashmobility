@@ -13,18 +13,18 @@
   align-items: center;
   height: 4px;
   margin: 16px 0;
-  background: #22201e;
+  background: var(--color-text);
 }
 
 .handle {
   width: 16px;
   height: 16px;
-  border: 2px solid #22201e;
+  border: 2px solid var(--color-text);
   border-radius: 50%;
-  background: #f7f6f3;
+  background: var(--color-background);
 }
 
 .hint {
-  color: #5f5a55;
+  color: var(--color-text-muted);
   font-size: 0.875rem;
 }
