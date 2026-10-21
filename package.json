@@ -1,0 +1,29 @@
+{
+  "name": "prueba-slashmobility",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 8080",
+    "build": "next build",
+    "start": "next start --port 8080",
+    "lint": "eslint",
+    "format:fix": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "next": "16.4.2",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.2",
+    "eslint-config-prettier": "10.1.8",
+    "prettier": "3.9.10",
+    "typescript": "^5"
+  },
+  "packageManager": "pnpm@11.12.0"
+}
