@@ -1,0 +1,27 @@
+.exerciseNav {
+  margin-top: 2.5rem;
+}
+
+.exerciseNav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid #d8d4cf;
+}
+
+.exerciseNav a {
+  display: block;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid #d8d4cf;
+  color: inherit;
+  text-decoration: none;
+}
+
+.exerciseNav a:hover {
+  color: #6b5141;
+}
+
+.exerciseNav a:focus-visible {
+  outline: 2px solid #6b5141;
+  outline-offset: 4px;
+}
