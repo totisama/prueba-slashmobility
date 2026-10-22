@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './RangeInput.module.css';
 
 export function RangeInput({
@@ -14,7 +14,7 @@ export function RangeInput({
   min: number;
   max: number;
   value: number;
-  onChange?: (value: number, id: string) => void;
+  onChange: (value: number, id: string) => void;
 }) {
   const [draft, setDraft] = useState<string | null>(null);
   let error = '';
@@ -44,7 +44,7 @@ export function RangeInput({
       return;
     }
 
-    onChange?.(newValue, id);
+    onChange(newValue, id);
   };
 
   const handleBlur = () => {
@@ -55,6 +55,21 @@ export function RangeInput({
       setDraft(null);
     }
   };
+
+  useEffect(() => {
+    if (draft === null || draft === '') return;
+
+    const number = Number(draft);
+
+    if (
+      Number.isFinite(number) &&
+      number >= min &&
+      number <= max &&
+      number !== value
+    ) {
+      onChange?.(number, id);
+    }
+  }, [draft, min, max, value, onChange, id]);
 
   return (
     <div className={styles.container}>
