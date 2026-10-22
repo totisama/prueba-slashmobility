@@ -67,7 +67,7 @@ export function RangeInput({
       number <= max &&
       number !== value
     ) {
-      onChange?.(number, id);
+      onChange(number, id);
     }
   }, [draft, min, max, value, onChange, id]);
 

@@ -20,6 +20,14 @@ export default function Range(props: RangeProps) {
     return null;
   }
 
+  if (
+    !Number.isFinite(props.min) ||
+    !Number.isFinite(props.max) ||
+    props.min >= props.max
+  ) {
+    return <p>Invalid range limits.</p>;
+  }
+
   return (
     <ContinuousRange
       min={props.min}
@@ -30,6 +38,9 @@ export default function Range(props: RangeProps) {
 
 function ContinuousRange({ min, max }: { min: number; max: number }) {
   const [selectedRange, setSelectedRange] = useState({ min, max });
+
+  const minPosition = ((selectedRange.min - min) / (max - min)) * 100;
+  const maxPosition = ((selectedRange.max - min) / (max - min)) * 100;
 
   const handleChange = (value: number, id: string) => {
     setSelectedRange((prev) => ({
@@ -44,8 +55,14 @@ function ContinuousRange({ min, max }: { min: number; max: number }) {
         className={styles.track}
         aria-hidden='true'
       >
-        <span className={styles.handle} />
-        <span className={styles.handle} />
+        <span
+          className={styles.handle}
+          style={{ left: `${minPosition}%` }}
+        />
+        <span
+          className={styles.handle}
+          style={{ left: `${maxPosition}%` }}
+        />
       </div>
       <div className={styles.labels}>
         <RangeInput
