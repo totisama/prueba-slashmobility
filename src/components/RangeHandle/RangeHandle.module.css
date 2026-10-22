@@ -7,4 +7,14 @@
   border: 2px solid var(--color-text);
   border-radius: 50%;
   background: var(--color-background);
+  transition: transform 0.1s ease-in;
+}
+
+.handle:hover {
+  transform: translate(-50%, -50%) scale(1.25);
+  cursor: grab;
+}
+
+.handle:active {
+  cursor: grabbing;
 }

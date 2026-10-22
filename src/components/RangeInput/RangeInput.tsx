@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './RangeInput.module.css';
 
 export function RangeInput({
@@ -17,6 +17,7 @@ export function RangeInput({
   onChange: (value: number, id: string) => void;
 }) {
   const [draft, setDraft] = useState<string | null>(null);
+  const previousValue = useRef(value);
   let error = '';
 
   if (draft !== null) {
@@ -55,6 +56,14 @@ export function RangeInput({
       setDraft(null);
     }
   };
+
+  useEffect(() => {
+    if (previousValue.current !== value && error) {
+      setDraft(null);
+    }
+
+    previousValue.current = value;
+  }, [value, error]);
 
   useEffect(() => {
     if (draft === null || draft === '') return;
