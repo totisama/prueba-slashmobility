@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { RangeHandle } from '@/components/RangeHandle/RangeHandle';
 import { RangeInput } from '@/components/RangeInput/RangeInput';
 import styles from './Range.module.css';
 
@@ -50,6 +51,28 @@ function ContinuousRange({ min, max }: { min: number; max: number }) {
     }));
   };
 
+  const handleMove = (pointerX: number, type: 'min' | 'max') => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const trackRect = track.getBoundingClientRect();
+    const percentage = (pointerX - trackRect.left) / trackRect.width;
+    const calculatedValue = Math.round(percentage * (max - min) + min);
+    const value = Math.max(min, Math.min(max, calculatedValue));
+
+    setSelectedRange((prev) => {
+      if (type === 'min') {
+        const nextMin = Math.min(value, prev.max);
+        if (nextMin === prev.min) return prev;
+        return { ...prev, min: nextMin };
+      }
+
+      const nextMax = Math.max(value, prev.min);
+      if (nextMax === prev.max) return prev;
+      return { ...prev, max: nextMax };
+    });
+  };
+
   return (
     <div className={styles.range}>
       <div
@@ -57,61 +80,13 @@ function ContinuousRange({ min, max }: { min: number; max: number }) {
         aria-hidden='true'
         ref={trackRef}
       >
-        <span
-          className={styles.handle}
-          style={{ left: `${minPosition}%` }}
-          onPointerDown={(event) => {
-            event.currentTarget.setPointerCapture(event.pointerId);
-          }}
-          onPointerMove={(event) => {
-            if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
-
-            const track = trackRef.current;
-            if (!track) return;
-
-            const trackRect = track.getBoundingClientRect();
-            const percentage =
-              (event.clientX - trackRect.left) / trackRect.width;
-            const value = Math.round(percentage * (max - min) + min);
-
-            if (value < min || value > max) return;
-
-            setSelectedRange((prev) => {
-              if (value > prev.max || value === prev.min) {
-                return prev;
-              }
-
-              return { ...prev, min: value };
-            });
-          }}
+        <RangeHandle
+          position={minPosition}
+          onMove={(pointerX) => handleMove(pointerX, 'min')}
         />
-        <span
-          className={styles.handle}
-          style={{ left: `${maxPosition}%` }}
-          onPointerDown={(event) => {
-            event.currentTarget.setPointerCapture(event.pointerId);
-          }}
-          onPointerMove={(event) => {
-            if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
-
-            const track = trackRef.current;
-            if (!track) return;
-
-            const trackRect = track.getBoundingClientRect();
-            const percentage =
-              (event.clientX - trackRect.left) / trackRect.width;
-            const value = Math.round(percentage * (max - min) + min);
-
-            if (value < min || value > max) return;
-
-            setSelectedRange((prev) => {
-              if (value < prev.min || value === prev.max) {
-                return prev;
-              }
-
-              return { ...prev, max: value };
-            });
-          }}
+        <RangeHandle
+          position={maxPosition}
+          onMove={(pointerX) => handleMove(pointerX, 'max')}
         />
       </div>
       <div className={styles.labels}>

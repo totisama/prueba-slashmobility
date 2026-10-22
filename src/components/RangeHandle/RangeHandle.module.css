@@ -1,0 +1,10 @@
+.handle {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-text);
+  border-radius: 50%;
+  background: var(--color-background);
+}
