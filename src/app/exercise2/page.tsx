@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import BackLink from '@/components/BackLink/BackLink';
 import Page from '@/components/Page/Page';
+import Range from '@/components/Range/Range';
 import { loadRangeValues } from '@/lib/range-api';
 
 async function RangeValues() {
@@ -10,7 +11,12 @@ async function RangeValues() {
     return <p>Unable to load the range values.</p>;
   }
 
-  return <p>Available values: {values.join(', ')}</p>;
+  return (
+    <Range
+      mode='fixed'
+      values={values}
+    />
+  );
 }
 
 export default function Exercise2Page() {

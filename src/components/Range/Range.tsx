@@ -18,7 +18,16 @@ type RangeProps =
 
 export default function Range(props: RangeProps) {
   if (props.mode === 'fixed') {
-    return null;
+    const { values } = props;
+
+    if (
+      values.length === 0 ||
+      values.some((value) => !Number.isFinite(value))
+    ) {
+      return <p>Invalid range values.</p>;
+    }
+
+    return <FixedRange values={props.values} />;
   }
 
   if (
@@ -34,6 +43,37 @@ export default function Range(props: RangeProps) {
       min={props.min}
       max={props.max}
     />
+  );
+}
+
+function FixedRange({ values }: { values: number[] }) {
+  const [selectedRange, setSelectedRange] = useState({
+    minPosition: 0,
+    maxPosition: values.length - 1,
+  });
+
+  return (
+    <div className={styles.range}>
+      <span className={styles.minLabel}>
+        {values[selectedRange.minPosition]} €
+      </span>
+      <div
+        className={styles.track}
+        aria-hidden='true'
+      >
+        <RangeHandle
+          position={0}
+          onMove={() => {}}
+        />
+        <RangeHandle
+          position={100}
+          onMove={() => {}}
+        />
+      </div>
+      <span className={styles.label}>
+        {values[selectedRange.maxPosition]} €
+      </span>
+    </div>
   );
 }
 

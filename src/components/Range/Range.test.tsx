@@ -4,6 +4,50 @@ import { describe, expect, test, vi } from 'vitest';
 import Range from '@/components/Range/Range';
 
 describe('Range', () => {
+  test('shows the first and last fixed values with handles at the ends', () => {
+    const { container } = render(
+      <Range
+        mode='fixed'
+        values={[1.99, 5.99, 70.99]}
+      />,
+    );
+
+    expect(screen.getByText('1.99 €')).toBeTruthy();
+    expect(screen.getByText('70.99 €')).toBeTruthy();
+
+    const handles = container.querySelectorAll<HTMLElement>(
+      '[aria-hidden="true"] > span[style]',
+    );
+    expect(handles).toHaveLength(2);
+    expect(handles[0].style.left).toBe('0%');
+    expect(handles[1].style.left).toBe('100%');
+  });
+
+  test('shows an error when there are no fixed values', () => {
+    render(
+      <Range
+        mode='fixed'
+        values={[]}
+      />,
+    );
+
+    expect(screen.getByText('Invalid range values.')).toBeTruthy();
+  });
+
+  test.each([NaN, Infinity, -Infinity])(
+    'shows an error when a fixed value is not finite',
+    (invalidValue) => {
+      render(
+        <Range
+          mode='fixed'
+          values={[1.99, invalidValue, 70.99]}
+        />,
+      );
+
+      expect(screen.getByText('Invalid range values.')).toBeTruthy();
+    },
+  );
+
   test('shows an error when the minimum is greater than the maximum', () => {
     render(
       <Range
