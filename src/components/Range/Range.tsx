@@ -21,8 +21,9 @@ export default function Range(props: RangeProps) {
     const { values } = props;
 
     if (
-      values.length === 0 ||
-      values.some((value) => !Number.isFinite(value))
+      values.length < 2 ||
+      values.some((value) => !Number.isFinite(value)) ||
+      !values.every((value, index) => index === 0 || value > values[index - 1])
     ) {
       return <p>Invalid range values.</p>;
     }
@@ -51,6 +52,34 @@ function FixedRange({ values }: { values: number[] }) {
     minPosition: 0,
     maxPosition: values.length - 1,
   });
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const minPosition = (selectedRange.minPosition * 100) / (values.length - 1);
+  const maxPosition = (selectedRange.maxPosition * 100) / (values.length - 1);
+
+  const handleMove = (pointerX: number, type: 'min' | 'max') => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const trackRect = track.getBoundingClientRect();
+    const percentage = ((pointerX - trackRect.left) / trackRect.width) * 100;
+    const calculatedValue = Math.round(
+      (percentage * (values.length - 1)) / 100,
+    );
+    const value = Math.max(0, Math.min(values.length - 1, calculatedValue));
+
+    setSelectedRange((prev) => {
+      if (type === 'min') {
+        const nextMin = Math.min(value, prev.maxPosition);
+        if (nextMin === prev.minPosition) return prev;
+        return { ...prev, minPosition: nextMin };
+      }
+
+      const nextMax = Math.max(value, prev.minPosition);
+      if (nextMax === prev.maxPosition) return prev;
+      return { ...prev, maxPosition: nextMax };
+    });
+  };
 
   return (
     <div className={styles.range}>
@@ -60,14 +89,15 @@ function FixedRange({ values }: { values: number[] }) {
       <div
         className={styles.track}
         aria-hidden='true'
+        ref={trackRef}
       >
         <RangeHandle
-          position={0}
-          onMove={() => {}}
+          position={minPosition}
+          onMove={(pointerX) => handleMove(pointerX, 'min')}
         />
         <RangeHandle
-          position={100}
-          onMove={() => {}}
+          position={maxPosition}
+          onMove={(pointerX) => handleMove(pointerX, 'max')}
         />
       </div>
       <span className={styles.label}>
