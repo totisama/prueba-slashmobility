@@ -75,6 +75,14 @@ function ContinuousRange({ min, max }: { min: number; max: number }) {
 
   return (
     <div className={styles.range}>
+      <RangeInput
+        id='min'
+        label='Minimum'
+        value={selectedRange.min}
+        min={min}
+        max={selectedRange.max}
+        onChange={handleChange}
+      />
       <div
         className={styles.track}
         aria-hidden='true'
@@ -89,24 +97,14 @@ function ContinuousRange({ min, max }: { min: number; max: number }) {
           onMove={(pointerX) => handleMove(pointerX, 'max')}
         />
       </div>
-      <div className={styles.labels}>
-        <RangeInput
-          id='min'
-          label='Min'
-          value={selectedRange.min}
-          min={min}
-          max={selectedRange.max}
-          onChange={handleChange}
-        />
-        <RangeInput
-          id='max'
-          label='Max'
-          value={selectedRange.max}
-          min={selectedRange.min}
-          max={max}
-          onChange={handleChange}
-        />
-      </div>
+      <RangeInput
+        id='max'
+        label='Maximum'
+        value={selectedRange.max}
+        min={selectedRange.min}
+        max={max}
+        onChange={handleChange}
+      />
     </div>
   );
 }
