@@ -146,12 +146,12 @@ describe('Range', () => {
         screen
           .getByRole('spinbutton', { name: 'Minimum in euros' })
           .getAttribute('max'),
-      ).toBe('9.1');
+      ).toBe('9');
       expect(
         screen
           .getByRole('spinbutton', { name: 'Maximum in euros' })
           .getAttribute('min'),
-      ).toBe('1.9');
+      ).toBe('2');
     });
 
     test('shows an error when the minimum is greater than the maximum', () => {
@@ -243,7 +243,7 @@ describe('Range', () => {
       await user.clear(input);
       await user.type(input, '0');
 
-      expect(screen.getByText('Enter a value between 1 and 90.1')).toBeTruthy();
+      expect(screen.getByText('Enter a value between 1 and 90')).toBeTruthy();
       expect(input.getAttribute('aria-invalid')).toBe('true');
     });
 
@@ -264,7 +264,7 @@ describe('Range', () => {
       await user.type(input, '101');
 
       expect(
-        screen.getByText('Enter a value between 10.9 and 100'),
+        screen.getByText('Enter a value between 11 and 100'),
       ).toBeTruthy();
       expect(input.getAttribute('aria-invalid')).toBe('true');
     });
@@ -318,7 +318,7 @@ describe('Range', () => {
       await user.type(input, '0');
 
       expect(handle?.style.left).toBe(lastValidPosition);
-      expect(screen.getByText('Enter a value between 1 and 90.1')).toBeTruthy();
+      expect(screen.getByText('Enter a value between 1 and 90')).toBeTruthy();
     });
 
     test('does not allow the minimum to exceed the selected maximum', async () => {
@@ -342,7 +342,7 @@ describe('Range', () => {
       await user.clear(minimum);
       await user.type(minimum, '60');
 
-      expect(screen.getByText('Enter a value between 1 and 40.1')).toBeTruthy();
+      expect(screen.getByText('Enter a value between 1 and 40')).toBeTruthy();
       expect(maximum).toHaveProperty('value', '50');
     });
 
@@ -368,7 +368,7 @@ describe('Range', () => {
       await user.type(maximum, '40');
 
       expect(
-        screen.getByText('Enter a value between 59.9 and 100'),
+        screen.getByText('Enter a value between 60 and 100'),
       ).toBeTruthy();
       expect(minimum).toHaveProperty('value', '50');
     });
@@ -394,13 +394,13 @@ describe('Range', () => {
       await user.clear(maximum);
       await user.type(maximum, '59');
       expect(
-        screen.getByText('Enter a value between 59.9 and 100'),
+        screen.getByText('Enter a value between 60 and 100'),
       ).toBeTruthy();
 
       await user.clear(maximum);
       await user.type(maximum, '60');
       expect(
-        screen.queryByText('Enter a value between 59.9 and 100'),
+        screen.queryByText('Enter a value between 60 and 100'),
       ).toBeNull();
       expect(maximum).toHaveProperty('value', '60');
     });
@@ -454,6 +454,8 @@ describe('Range', () => {
         name: 'Maximum in euros',
       });
 
+      drag(minimumHandle, 300);
+      expect(minimum).toHaveProperty('value', '90');
       drag(minimumHandle, 200);
       expect(minimum).toHaveProperty('value', '50');
       drag(maximumHandle, 500);

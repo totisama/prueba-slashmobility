@@ -110,7 +110,7 @@ function FixedRange({ values }: { values: number[] }) {
 function ContinuousRange({ min, max }: { min: number; max: number }) {
   const [selectedRange, setSelectedRange] = useState({ min, max });
   const trackRef = useRef<HTMLDivElement>(null);
-  const minGap = (max - min) * 0.1;
+  const minGap = Math.ceil((max - min) * 0.1);
 
   const minPosition = ((selectedRange.min - min) / (max - min)) * 100;
   const maxPosition = ((selectedRange.max - min) / (max - min)) * 100;
