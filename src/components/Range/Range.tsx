@@ -31,18 +31,16 @@ export default function Range(props: RangeProps) {
     return <FixedRange values={props.values} />;
   }
 
-  if (
-    !Number.isFinite(props.min) ||
-    !Number.isFinite(props.max) ||
-    props.min >= props.max
-  ) {
+  const { min, max } = props;
+
+  if (!Number.isFinite(min) || !Number.isFinite(max) || min >= max) {
     return <p>Invalid range limits.</p>;
   }
 
   return (
     <ContinuousRange
-      min={props.min}
-      max={props.max}
+      min={min}
+      max={max}
     />
   );
 }
