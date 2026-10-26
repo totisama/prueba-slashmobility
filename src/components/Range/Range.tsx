@@ -1,8 +1,8 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { RangeHandle } from '@/components/RangeHandle/RangeHandle';
 import { RangeInput } from '@/components/RangeInput/RangeInput';
+import { RangeTrack } from './RangeTrack';
+import { useRangeSelection } from './useRangeSelection';
 import styles from './Range.module.css';
 
 type RangeProps =
@@ -46,99 +46,52 @@ export default function Range(props: RangeProps) {
 }
 
 function FixedRange({ values }: { values: number[] }) {
-  const [selectedRange, setSelectedRange] = useState({
-    minPosition: 0,
-    maxPosition: values.length - 1,
-  });
-  const trackRef = useRef<HTMLDivElement>(null);
-
-  const minPosition = (selectedRange.minPosition * 100) / (values.length - 1);
-  const maxPosition = (selectedRange.maxPosition * 100) / (values.length - 1);
-
-  const handleMove = (pointerX: number, type: 'min' | 'max') => {
-    const track = trackRef.current;
-    if (!track) return;
-
-    const trackRect = track.getBoundingClientRect();
-    const percentage = ((pointerX - trackRect.left) / trackRect.width) * 100;
-    const calculatedValue = Math.round(
-      (percentage * (values.length - 1)) / 100,
-    );
-    const value = Math.max(0, Math.min(values.length - 1, calculatedValue));
-
-    setSelectedRange((prev) => {
-      if (type === 'min') {
-        const nextMin = Math.min(value, prev.maxPosition);
-        if (nextMin === prev.minPosition) return prev;
-        return { ...prev, minPosition: nextMin };
-      }
-
-      const nextMax = Math.max(value, prev.minPosition);
-      if (nextMax === prev.maxPosition) return prev;
-      return { ...prev, maxPosition: nextMax };
+  const { selectedRange, trackRef, minPosition, maxPosition, handleMove } =
+    useRangeSelection({
+      min: 0,
+      max: values.length - 1,
+      initialSelection: {
+        min: 0,
+        max: values.length - 1,
+      },
+      getValueFromPercentage: (percentage) =>
+        Math.round((percentage * (values.length - 1)) / 100),
+      getPercentageFromValue: (value) => (value * 100) / (values.length - 1),
     });
-  };
 
   return (
     <div className={styles.range}>
-      <span className={styles.minLabel}>
-        {values[selectedRange.minPosition]} €
-      </span>
-      <div
-        className={styles.track}
-        aria-hidden='true'
-        ref={trackRef}
-      >
-        <RangeHandle
-          position={minPosition}
-          onMove={(pointerX) => handleMove(pointerX, 'min')}
-        />
-        <RangeHandle
-          position={maxPosition}
-          onMove={(pointerX) => handleMove(pointerX, 'max')}
-        />
-      </div>
-      <span className={styles.label}>
-        {values[selectedRange.maxPosition]} €
-      </span>
+      <span className={styles.minLabel}>{values[selectedRange.min]} €</span>
+      <RangeTrack
+        trackRef={trackRef}
+        minPosition={minPosition}
+        maxPosition={maxPosition}
+        onMove={handleMove}
+      />
+      <span className={styles.label}>{values[selectedRange.max]} €</span>
     </div>
   );
 }
 
 function ContinuousRange({ min, max }: { min: number; max: number }) {
-  const [selectedRange, setSelectedRange] = useState({ min, max });
-  const trackRef = useRef<HTMLDivElement>(null);
-
-  const minPosition = ((selectedRange.min - min) / (max - min)) * 100;
-  const maxPosition = ((selectedRange.max - min) / (max - min)) * 100;
+  const {
+    selectedRange,
+    trackRef,
+    minPosition,
+    maxPosition,
+    updateSelectedRange,
+    handleMove,
+  } = useRangeSelection({
+    min,
+    max,
+    initialSelection: { min, max },
+    getValueFromPercentage: (percentage) =>
+      Math.round((percentage * (max - min)) / 100 + min),
+    getPercentageFromValue: (value) => ((value - min) / (max - min)) * 100,
+  });
 
   const handleChange = (value: number, id: string) => {
-    setSelectedRange((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
-  };
-
-  const handleMove = (pointerX: number, type: 'min' | 'max') => {
-    const track = trackRef.current;
-    if (!track) return;
-
-    const trackRect = track.getBoundingClientRect();
-    const percentage = (pointerX - trackRect.left) / trackRect.width;
-    const calculatedValue = Math.round(percentage * (max - min) + min);
-    const value = Math.max(min, Math.min(max, calculatedValue));
-
-    setSelectedRange((prev) => {
-      if (type === 'min') {
-        const nextMin = Math.min(value, prev.max);
-        if (nextMin === prev.min) return prev;
-        return { ...prev, min: nextMin };
-      }
-
-      const nextMax = Math.max(value, prev.min);
-      if (nextMax === prev.max) return prev;
-      return { ...prev, max: nextMax };
-    });
+    updateSelectedRange(value, id === 'min' ? 'min' : 'max');
   };
 
   return (
@@ -151,20 +104,12 @@ function ContinuousRange({ min, max }: { min: number; max: number }) {
         max={selectedRange.max}
         onChange={handleChange}
       />
-      <div
-        className={styles.track}
-        aria-hidden='true'
-        ref={trackRef}
-      >
-        <RangeHandle
-          position={minPosition}
-          onMove={(pointerX) => handleMove(pointerX, 'min')}
-        />
-        <RangeHandle
-          position={maxPosition}
-          onMove={(pointerX) => handleMove(pointerX, 'max')}
-        />
-      </div>
+      <RangeTrack
+        trackRef={trackRef}
+        minPosition={minPosition}
+        maxPosition={maxPosition}
+        onMove={handleMove}
+      />
       <RangeInput
         id='max'
         label='Maximum'
