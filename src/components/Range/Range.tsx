@@ -1,6 +1,7 @@
 'use client';
 
 import { RangeInput } from '@/components/RangeInput/RangeInput';
+import { RangeStatus } from '@/components/RangeStatus/RangeStatus';
 import { RangeTrack } from './RangeTrack';
 import { useRangeSelection } from './useRangeSelection';
 import styles from './Range.module.css';
@@ -25,7 +26,12 @@ export default function Range(props: RangeProps) {
       values.some((value) => !Number.isFinite(value)) ||
       !values.every((value, index) => index === 0 || value > values[index - 1])
     ) {
-      return <p>Invalid range values.</p>;
+      return (
+        <RangeStatus
+          variant='error'
+          message='Invalid range values.'
+        />
+      );
     }
 
     return <FixedRange values={props.values} />;
@@ -34,7 +40,12 @@ export default function Range(props: RangeProps) {
   const { min, max } = props;
 
   if (!Number.isFinite(min) || !Number.isFinite(max) || min >= max) {
-    return <p>Invalid range limits.</p>;
+    return (
+      <RangeStatus
+        variant='error'
+        message='Invalid range limits.'
+      />
+    );
   }
 
   return (

@@ -32,7 +32,10 @@ describe('Range', () => {
         />,
       );
 
-      expect(screen.getByText('Invalid range values.')).toBeTruthy();
+      expect(screen.getByRole('alert')).toHaveProperty(
+        'textContent',
+        'Invalid range values.',
+      );
     });
 
     test('shows an error when there is only one fixed value', () => {
