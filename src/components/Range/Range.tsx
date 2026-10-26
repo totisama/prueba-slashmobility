@@ -67,7 +67,10 @@ function FixedRange({ values }: { values: number[] }) {
 
   return (
     <div className={styles.range}>
-      <span className={styles.minLabel}>{values[selectedRange.min]} €</span>
+      <span className={styles.minLabel}>
+        <span>Minimum</span>
+        <span>{values[selectedRange.min]} €</span>
+      </span>
       <RangeTrack
         trackRef={trackRef}
         minHandle={{
@@ -87,7 +90,10 @@ function FixedRange({ values }: { values: number[] }) {
         onMove={handleMove}
         onKeyDown={handleKeyDown}
       />
-      <span className={styles.label}>{values[selectedRange.max]} €</span>
+      <span className={styles.label}>
+        <span>Maximum</span>
+        <span>{values[selectedRange.max]} €</span>
+      </span>
     </div>
   );
 }

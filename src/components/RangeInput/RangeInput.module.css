@@ -1,26 +1,39 @@
 .container {
-  width: 90px;
+  width: 120px;
 }
 
 .field {
   display: flex;
   align-items: center;
+  gap: 4px;
 }
 
 .container:first-child .field {
   justify-content: flex-end;
 }
 
+.inputContainer {
+  position: relative;
+  flex-shrink: 0;
+}
+
 .input {
   field-sizing: content;
   min-width: 20px;
   max-width: 70px;
-  padding: 4px 2px;
+  padding: 4px 16px 4px 2px;
   border: 0;
   border-bottom: 1px solid transparent;
   background: var(--color-background);
   color: var(--color-text);
   font: inherit;
+}
+
+.currency {
+  position: absolute;
+  top: 50%;
+  right: 2px;
+  transform: translateY(-50%);
 }
 
 .input:focus {

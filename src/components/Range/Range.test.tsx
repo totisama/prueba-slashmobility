@@ -161,14 +161,10 @@ describe('Range', () => {
         />,
       );
       expect(
-        screen
-          .getByRole('spinbutton', { name: 'Minimum in euros' })
-          .getAttribute('max'),
+        screen.getByRole('spinbutton', { name: 'Minimum' }).getAttribute('max'),
       ).toBe('10');
       expect(
-        screen
-          .getByRole('spinbutton', { name: 'Maximum in euros' })
-          .getAttribute('min'),
+        screen.getByRole('spinbutton', { name: 'Maximum' }).getAttribute('min'),
       ).toBe('1');
     });
 
@@ -205,10 +201,10 @@ describe('Range', () => {
         />,
       );
       expect(
-        screen.getByRole('spinbutton', { name: 'Minimum in euros' }),
+        screen.getByRole('spinbutton', { name: 'Minimum' }),
       ).toHaveProperty('value', '1');
       expect(
-        screen.getByRole('spinbutton', { name: 'Maximum in euros' }),
+        screen.getByRole('spinbutton', { name: 'Maximum' }),
       ).toHaveProperty('value', '11');
     });
 
@@ -238,10 +234,10 @@ describe('Range', () => {
       );
 
       expect(
-        screen.getByRole('spinbutton', { name: 'Minimum in euros' }),
+        screen.getByRole('spinbutton', { name: 'Minimum' }),
       ).toHaveProperty('value', '1');
       expect(
-        screen.getByRole('spinbutton', { name: 'Maximum in euros' }),
+        screen.getByRole('spinbutton', { name: 'Maximum' }),
       ).toHaveProperty('value', '100');
     });
 
@@ -258,10 +254,10 @@ describe('Range', () => {
         '[aria-hidden="true"][style]',
       );
       const minimum = screen.getByRole('spinbutton', {
-        name: 'Minimum in euros',
+        name: 'Minimum',
       });
       const maximum = screen.getByRole('spinbutton', {
-        name: 'Maximum in euros',
+        name: 'Maximum',
       });
 
       expect(selection?.style.left).toBe('0%');
@@ -287,7 +283,7 @@ describe('Range', () => {
       );
 
       const input = screen.getByRole('spinbutton', {
-        name: 'Minimum in euros',
+        name: 'Minimum',
       });
       await user.clear(input);
       await user.type(input, '0');
@@ -307,7 +303,7 @@ describe('Range', () => {
       );
 
       const input = screen.getByRole('spinbutton', {
-        name: 'Maximum in euros',
+        name: 'Maximum',
       });
       await user.clear(input);
       await user.type(input, '101');
@@ -326,7 +322,7 @@ describe('Range', () => {
         />,
       );
       const input = screen.getByRole('spinbutton', {
-        name: 'Minimum in euros',
+        name: 'Minimum',
       });
       const handle = container.querySelector<HTMLElement>('[role="slider"]');
 
@@ -348,7 +344,7 @@ describe('Range', () => {
         />,
       );
       const input = screen.getByRole('spinbutton', {
-        name: 'Minimum in euros',
+        name: 'Minimum',
       });
       const handle = container.querySelector<HTMLElement>('[role="slider"]');
 
@@ -374,10 +370,10 @@ describe('Range', () => {
         />,
       );
       const minimum = screen.getByRole('spinbutton', {
-        name: 'Minimum in euros',
+        name: 'Minimum',
       });
       const maximum = screen.getByRole('spinbutton', {
-        name: 'Maximum in euros',
+        name: 'Maximum',
       });
 
       await user.clear(maximum);
@@ -399,10 +395,10 @@ describe('Range', () => {
         />,
       );
       const minimum = screen.getByRole('spinbutton', {
-        name: 'Minimum in euros',
+        name: 'Minimum',
       });
       const maximum = screen.getByRole('spinbutton', {
-        name: 'Maximum in euros',
+        name: 'Maximum',
       });
 
       await user.clear(minimum);
@@ -424,10 +420,10 @@ describe('Range', () => {
         />,
       );
       const minimum = screen.getByRole('spinbutton', {
-        name: 'Minimum in euros',
+        name: 'Minimum',
       });
       const maximum = screen.getByRole('spinbutton', {
-        name: 'Maximum in euros',
+        name: 'Maximum',
       });
 
       await user.clear(minimum);
@@ -508,10 +504,10 @@ describe('Range', () => {
       };
 
       const minimum = screen.getByRole('spinbutton', {
-        name: 'Minimum in euros',
+        name: 'Minimum',
       });
       const maximum = screen.getByRole('spinbutton', {
-        name: 'Maximum in euros',
+        name: 'Maximum',
       });
 
       drag(minimumHandle, 300);

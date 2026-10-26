@@ -83,20 +83,27 @@ export function RangeInput({
   return (
     <div className={styles.container}>
       <div className={styles.field}>
-        <input
-          id={id}
-          className={styles.input}
-          type='number'
-          value={draft ?? value}
-          min={min}
-          max={max}
-          aria-label={`${label} in euros`}
-          aria-invalid={!!error}
-          aria-describedby={error ? `${id}-error` : undefined}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        <span aria-hidden='true'>€</span>
+        <label htmlFor={id}>{label}</label>
+        <div className={styles.inputContainer}>
+          <input
+            id={id}
+            className={styles.input}
+            type='number'
+            value={draft ?? value}
+            min={min}
+            max={max}
+            aria-invalid={!!error}
+            aria-describedby={error ? `${id}-error` : undefined}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          <span
+            className={styles.currency}
+            aria-hidden='true'
+          >
+            €
+          </span>
+        </div>
       </div>
       {error && (
         <p

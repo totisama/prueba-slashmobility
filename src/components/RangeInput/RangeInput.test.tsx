@@ -17,7 +17,7 @@ describe('RangeInput', () => {
         onChange={onChange}
       />,
     );
-    const input = screen.getByRole('spinbutton', { name: 'Minimum in euros' });
+    const input = screen.getByRole('spinbutton', { name: 'Minimum' });
 
     await user.clear(input);
     await user.tab();
@@ -41,7 +41,7 @@ describe('RangeInput', () => {
         onChange={onChange}
       />,
     );
-    const input = screen.getByRole('spinbutton', { name: 'Minimum in euros' });
+    const input = screen.getByRole('spinbutton', { name: 'Minimum' });
 
     await user.clear(input);
     await user.type(input, '0');
@@ -63,7 +63,7 @@ describe('RangeInput', () => {
         onChange={onChange}
       />,
     );
-    const input = screen.getByRole('spinbutton', { name: 'Minimum in euros' });
+    const input = screen.getByRole('spinbutton', { name: 'Minimum' });
 
     await user.clear(input);
     await user.type(input, '0');
@@ -89,7 +89,7 @@ describe('RangeInput', () => {
         onChange={onChange}
       />,
     );
-    const input = screen.getByRole('spinbutton', { name: 'Minimum in euros' });
+    const input = screen.getByRole('spinbutton', { name: 'Minimum' });
 
     await user.clear(input);
     expect(screen.getByText('Enter a number')).toBeTruthy();
@@ -122,7 +122,7 @@ describe('RangeInput', () => {
         onChange={onChange}
       />,
     );
-    const input = screen.getByRole('spinbutton', { name: 'Maximum in euros' });
+    const input = screen.getByRole('spinbutton', { name: 'Maximum' });
 
     await user.clear(input);
     await user.type(input, '40');
