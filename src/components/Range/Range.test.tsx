@@ -245,6 +245,37 @@ describe('Range', () => {
       ).toHaveProperty('value', '100');
     });
 
+    test('shows the selected segment between both handles', async () => {
+      const user = userEvent.setup();
+      const { container } = render(
+        <Range
+          mode='continuous'
+          min={0}
+          max={100}
+        />,
+      );
+      const selection = container.querySelector<HTMLElement>(
+        '[aria-hidden="true"][style]',
+      );
+      const minimum = screen.getByRole('spinbutton', {
+        name: 'Minimum in euros',
+      });
+      const maximum = screen.getByRole('spinbutton', {
+        name: 'Maximum in euros',
+      });
+
+      expect(selection?.style.left).toBe('0%');
+      expect(selection?.style.width).toBe('100%');
+
+      await user.clear(minimum);
+      await user.type(minimum, '20');
+      await user.clear(maximum);
+      await user.type(maximum, '80');
+
+      expect(selection?.style.left).toBe('20%');
+      expect(selection?.style.width).toBe('60%');
+    });
+
     test('shows an error when the minimum is below the allowed range', async () => {
       const user = userEvent.setup();
       render(

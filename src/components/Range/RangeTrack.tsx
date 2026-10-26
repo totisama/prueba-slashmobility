@@ -34,6 +34,14 @@ export function RangeTrack({
       className={styles.track}
       ref={trackRef}
     >
+      <span
+        className={styles.selection}
+        style={{
+          left: `${minHandle.position}%`,
+          width: `${maxHandle.position - minHandle.position}%`,
+        }}
+        aria-hidden='true'
+      />
       <RangeHandle
         {...minHandle}
         onMove={(pointerX) => onMove(pointerX, 'min')}
