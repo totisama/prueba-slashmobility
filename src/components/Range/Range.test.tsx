@@ -17,9 +17,8 @@ describe('Range', () => {
       expect(screen.getByText('70.99 €')).toBeTruthy();
       expect(screen.queryByRole('spinbutton')).toBeNull();
 
-      const handles = container.querySelectorAll<HTMLElement>(
-        '[aria-hidden="true"] > span[style]',
-      );
+      const handles =
+        container.querySelectorAll<HTMLElement>('[role="slider"]');
       expect(handles).toHaveLength(2);
       expect(handles[0].style.left).toBe('0%');
       expect(handles[1].style.left).toBe('100%');
@@ -82,9 +81,7 @@ describe('Range', () => {
         />,
       );
       const [minimumHandle, maximumHandle] =
-        container.querySelectorAll<HTMLElement>(
-          '[aria-hidden="true"] > span[style]',
-        );
+        container.querySelectorAll<HTMLElement>('[role="slider"]');
       vi.spyOn(
         minimumHandle.parentElement!,
         'getBoundingClientRect',
@@ -128,6 +125,29 @@ describe('Range', () => {
       move(maximumHandle, 100);
       expect(maximumHandle.style.left).toBe('40%');
       expect(screen.getAllByText('10.99 €')).toHaveLength(2);
+    });
+
+    test('updates fixed handles with the keyboard without crossing', () => {
+      render(
+        <Range
+          mode='fixed'
+          values={[1.99, 5.99, 10.99]}
+        />,
+      );
+      const minimum = screen.getByRole('slider', { name: 'Minimum value' });
+      const maximum = screen.getByRole('slider', { name: 'Maximum value' });
+
+      fireEvent.keyDown(minimum, { key: 'ArrowRight' });
+      expect(minimum.getAttribute('aria-valuenow')).toBe('5.99');
+
+      fireEvent.keyDown(maximum, { key: 'Home' });
+      expect(maximum.getAttribute('aria-valuenow')).toBe('5.99');
+
+      fireEvent.keyDown(minimum, { key: 'Home' });
+      expect(minimum.getAttribute('aria-valuenow')).toBe('1.99');
+
+      fireEvent.keyDown(maximum, { key: 'End' });
+      expect(maximum.getAttribute('aria-valuenow')).toBe('10.99');
     });
   });
 
@@ -277,9 +297,7 @@ describe('Range', () => {
       const input = screen.getByRole('spinbutton', {
         name: 'Minimum in euros',
       });
-      const handle = container.querySelector<HTMLElement>(
-        '[aria-hidden="true"] > span[style]',
-      );
+      const handle = container.querySelector<HTMLElement>('[role="slider"]');
 
       expect(handle?.style.left).toBe('0%');
 
@@ -301,9 +319,7 @@ describe('Range', () => {
       const input = screen.getByRole('spinbutton', {
         name: 'Minimum in euros',
       });
-      const handle = container.querySelector<HTMLElement>(
-        '[aria-hidden="true"] > span[style]',
-      );
+      const handle = container.querySelector<HTMLElement>('[role="slider"]');
 
       await user.clear(input);
       await user.type(input, '50');
@@ -392,6 +408,33 @@ describe('Range', () => {
       expect(maximum).toHaveProperty('value', '50');
     });
 
+    test('updates continuous handles with the keyboard without crossing', () => {
+      render(
+        <Range
+          mode='continuous'
+          min={0}
+          max={100}
+        />,
+      );
+      const minimum = screen.getByRole('slider', { name: 'Minimum value' });
+      const maximum = screen.getByRole('slider', { name: 'Maximum value' });
+
+      fireEvent.keyDown(minimum, { key: 'ArrowRight' });
+      expect(minimum.getAttribute('aria-valuenow')).toBe('1');
+
+      fireEvent.keyDown(maximum, { key: 'ArrowDown' });
+      expect(maximum.getAttribute('aria-valuenow')).toBe('99');
+
+      fireEvent.keyDown(minimum, { key: 'End' });
+      expect(minimum.getAttribute('aria-valuenow')).toBe('99');
+
+      fireEvent.keyDown(minimum, { key: 'Home' });
+      expect(minimum.getAttribute('aria-valuenow')).toBe('0');
+
+      fireEvent.keyDown(maximum, { key: 'End' });
+      expect(maximum.getAttribute('aria-valuenow')).toBe('100');
+    });
+
     test('dragging handles updates values, respects limits and prevents crossing', () => {
       const { container } = render(
         <Range
@@ -400,9 +443,8 @@ describe('Range', () => {
           max={100}
         />,
       );
-      const handles = container.querySelectorAll<HTMLElement>(
-        '[aria-hidden="true"] > span[style]',
-      );
+      const handles =
+        container.querySelectorAll<HTMLElement>('[role="slider"]');
       const [minimumHandle, maximumHandle] = handles;
       const track = minimumHandle.parentElement!;
       vi.spyOn(track, 'getBoundingClientRect').mockReturnValue({

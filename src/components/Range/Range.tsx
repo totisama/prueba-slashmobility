@@ -46,27 +46,46 @@ export default function Range(props: RangeProps) {
 }
 
 function FixedRange({ values }: { values: number[] }) {
-  const { selectedRange, trackRef, minPosition, maxPosition, handleMove } =
-    useRangeSelection({
+  const {
+    selectedRange,
+    trackRef,
+    minPosition,
+    maxPosition,
+    handleMove,
+    handleKeyDown,
+  } = useRangeSelection({
+    min: 0,
+    max: values.length - 1,
+    initialSelection: {
       min: 0,
       max: values.length - 1,
-      initialSelection: {
-        min: 0,
-        max: values.length - 1,
-      },
-      getValueFromPercentage: (percentage) =>
-        Math.round((percentage * (values.length - 1)) / 100),
-      getPercentageFromValue: (value) => (value * 100) / (values.length - 1),
-    });
+    },
+    getValueFromPercentage: (percentage) =>
+      Math.round((percentage * (values.length - 1)) / 100),
+    getPercentageFromValue: (value) => (value * 100) / (values.length - 1),
+  });
 
   return (
     <div className={styles.range}>
       <span className={styles.minLabel}>{values[selectedRange.min]} €</span>
       <RangeTrack
         trackRef={trackRef}
-        minPosition={minPosition}
-        maxPosition={maxPosition}
+        minHandle={{
+          label: 'Minimum value',
+          min: values[0],
+          max: values[selectedRange.max],
+          value: values[selectedRange.min],
+          position: minPosition,
+        }}
+        maxHandle={{
+          label: 'Maximum value',
+          min: values[selectedRange.min],
+          max: values.at(-1)!,
+          value: values[selectedRange.max],
+          position: maxPosition,
+        }}
         onMove={handleMove}
+        onKeyDown={handleKeyDown}
       />
       <span className={styles.label}>{values[selectedRange.max]} €</span>
     </div>
@@ -81,6 +100,7 @@ function ContinuousRange({ min, max }: { min: number; max: number }) {
     maxPosition,
     updateSelectedRange,
     handleMove,
+    handleKeyDown,
   } = useRangeSelection({
     min,
     max,
@@ -106,9 +126,22 @@ function ContinuousRange({ min, max }: { min: number; max: number }) {
       />
       <RangeTrack
         trackRef={trackRef}
-        minPosition={minPosition}
-        maxPosition={maxPosition}
+        minHandle={{
+          label: 'Minimum value',
+          min,
+          max: selectedRange.max,
+          value: selectedRange.min,
+          position: minPosition,
+        }}
+        maxHandle={{
+          label: 'Maximum value',
+          min: selectedRange.min,
+          max,
+          value: selectedRange.max,
+          position: maxPosition,
+        }}
         onMove={handleMove}
+        onKeyDown={handleKeyDown}
       />
       <RangeInput
         id='max'

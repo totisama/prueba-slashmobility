@@ -1,3 +1,4 @@
+import type { KeyboardEvent } from 'react';
 import { useRef, useState } from 'react';
 
 export type HandleType = 'min' | 'max';
@@ -54,6 +55,29 @@ export function useRangeSelection({
     updateSelectedRange(value, type);
   };
 
+  const handleKeyDown = (
+    event: KeyboardEvent<HTMLSpanElement>,
+    type: HandleType,
+  ) => {
+    const currentValue = type === 'min' ? selectedRange.min : selectedRange.max;
+    let nextValue = currentValue;
+
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
+      nextValue -= 1;
+    } else if (event.key === 'ArrowRight' || event.key === 'ArrowUp') {
+      nextValue += 1;
+    } else if (event.key === 'Home') {
+      nextValue = min;
+    } else if (event.key === 'End') {
+      nextValue = max;
+    } else {
+      return;
+    }
+
+    event.preventDefault();
+    updateSelectedRange(nextValue, type);
+  };
+
   return {
     selectedRange,
     trackRef,
@@ -61,5 +85,6 @@ export function useRangeSelection({
     maxPosition: getPercentageFromValue(selectedRange.max),
     updateSelectedRange,
     handleMove,
+    handleKeyDown,
   };
 }
