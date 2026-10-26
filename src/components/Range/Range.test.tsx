@@ -113,9 +113,8 @@ describe('Range', () => {
       expect(maximumHandle.style.left).toBe('60%');
 
       move(minimumHandle, 300);
-      expect(minimumHandle.style.left).toBe('40%');
-      expect(screen.getByText('10.99 €')).toBeTruthy();
-      expect(screen.getByText('30.99 €')).toBeTruthy();
+      expect(minimumHandle.style.left).toBe('60%');
+      expect(screen.getAllByText('30.99 €')).toHaveLength(2);
 
       move(minimumHandle, 0);
       expect(screen.getByText('1.99 €')).toBeTruthy();
@@ -127,14 +126,13 @@ describe('Range', () => {
 
       move(minimumHandle, 180);
       move(maximumHandle, 100);
-      expect(maximumHandle.style.left).toBe('60%');
-      expect(screen.getByText('10.99 €')).toBeTruthy();
-      expect(screen.getByText('30.99 €')).toBeTruthy();
+      expect(maximumHandle.style.left).toBe('40%');
+      expect(screen.getAllByText('10.99 €')).toHaveLength(2);
     });
   });
 
   describe('continuous mode', () => {
-    test('calculates the minimum gap from a small range', () => {
+    test('uses the selected values as input limits', () => {
       render(
         <Range
           mode='continuous'
@@ -146,12 +144,12 @@ describe('Range', () => {
         screen
           .getByRole('spinbutton', { name: 'Minimum in euros' })
           .getAttribute('max'),
-      ).toBe('9');
+      ).toBe('10');
       expect(
         screen
           .getByRole('spinbutton', { name: 'Maximum in euros' })
           .getAttribute('min'),
-      ).toBe('2');
+      ).toBe('1');
     });
 
     test('shows an error when the minimum is greater than the maximum', () => {
@@ -243,7 +241,7 @@ describe('Range', () => {
       await user.clear(input);
       await user.type(input, '0');
 
-      expect(screen.getByText('Enter a value between 1 and 90')).toBeTruthy();
+      expect(screen.getByText('Enter a value between 1 and 100')).toBeTruthy();
       expect(input.getAttribute('aria-invalid')).toBe('true');
     });
 
@@ -263,9 +261,7 @@ describe('Range', () => {
       await user.clear(input);
       await user.type(input, '101');
 
-      expect(
-        screen.getByText('Enter a value between 11 and 100'),
-      ).toBeTruthy();
+      expect(screen.getByText('Enter a value between 1 and 100')).toBeTruthy();
       expect(input.getAttribute('aria-invalid')).toBe('true');
     });
 
@@ -318,7 +314,7 @@ describe('Range', () => {
       await user.type(input, '0');
 
       expect(handle?.style.left).toBe(lastValidPosition);
-      expect(screen.getByText('Enter a value between 1 and 90')).toBeTruthy();
+      expect(screen.getByText('Enter a value between 1 and 100')).toBeTruthy();
     });
 
     test('does not allow the minimum to exceed the selected maximum', async () => {
@@ -342,7 +338,7 @@ describe('Range', () => {
       await user.clear(minimum);
       await user.type(minimum, '60');
 
-      expect(screen.getByText('Enter a value between 1 and 40')).toBeTruthy();
+      expect(screen.getByText('Enter a value between 1 and 50')).toBeTruthy();
       expect(maximum).toHaveProperty('value', '50');
     });
 
@@ -367,13 +363,11 @@ describe('Range', () => {
       await user.clear(maximum);
       await user.type(maximum, '40');
 
-      expect(
-        screen.getByText('Enter a value between 60 and 100'),
-      ).toBeTruthy();
+      expect(screen.getByText('Enter a value between 50 and 100')).toBeTruthy();
       expect(minimum).toHaveProperty('value', '50');
     });
 
-    test('requires a gap of at least 10% when editing values', async () => {
+    test('allows the selected values to match without crossing', async () => {
       const user = userEvent.setup();
       render(
         <Range
@@ -392,17 +386,10 @@ describe('Range', () => {
       await user.clear(minimum);
       await user.type(minimum, '50');
       await user.clear(maximum);
-      await user.type(maximum, '59');
-      expect(
-        screen.getByText('Enter a value between 60 and 100'),
-      ).toBeTruthy();
+      await user.type(maximum, '50');
 
-      await user.clear(maximum);
-      await user.type(maximum, '60');
-      expect(
-        screen.queryByText('Enter a value between 60 and 100'),
-      ).toBeNull();
-      expect(maximum).toHaveProperty('value', '60');
+      expect(screen.queryByText('Enter a value between 50 and 100')).toBeNull();
+      expect(maximum).toHaveProperty('value', '50');
     });
 
     test('dragging handles updates values, respects limits and prevents crossing', () => {
@@ -455,13 +442,13 @@ describe('Range', () => {
       });
 
       drag(minimumHandle, 300);
-      expect(minimum).toHaveProperty('value', '90');
+      expect(minimum).toHaveProperty('value', '100');
       drag(minimumHandle, 200);
       expect(minimum).toHaveProperty('value', '50');
       drag(maximumHandle, 500);
       expect(maximum).toHaveProperty('value', '100');
       drag(maximumHandle, 120);
-      expect(maximum).toHaveProperty('value', '60');
+      expect(maximum).toHaveProperty('value', '50');
       drag(minimumHandle, 0);
       expect(minimum).toHaveProperty('value', '0');
       drag(minimumHandle, 300);

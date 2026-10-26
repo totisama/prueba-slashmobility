@@ -16,8 +16,6 @@ type RangeProps =
       values: number[];
     };
 
-const MIN_FIXED_RANGE_GAP = 1;
-
 export default function Range(props: RangeProps) {
   if (props.mode === 'fixed') {
     const { values } = props;
@@ -70,12 +68,12 @@ function FixedRange({ values }: { values: number[] }) {
 
     setSelectedRange((prev) => {
       if (type === 'min') {
-        const nextMin = Math.min(value, prev.maxPosition - MIN_FIXED_RANGE_GAP);
+        const nextMin = Math.min(value, prev.maxPosition);
         if (nextMin === prev.minPosition) return prev;
         return { ...prev, minPosition: nextMin };
       }
 
-      const nextMax = Math.max(value, prev.minPosition + MIN_FIXED_RANGE_GAP);
+      const nextMax = Math.max(value, prev.minPosition);
       if (nextMax === prev.maxPosition) return prev;
       return { ...prev, maxPosition: nextMax };
     });
@@ -110,7 +108,6 @@ function FixedRange({ values }: { values: number[] }) {
 function ContinuousRange({ min, max }: { min: number; max: number }) {
   const [selectedRange, setSelectedRange] = useState({ min, max });
   const trackRef = useRef<HTMLDivElement>(null);
-  const minGap = Math.ceil((max - min) * 0.1);
 
   const minPosition = ((selectedRange.min - min) / (max - min)) * 100;
   const maxPosition = ((selectedRange.max - min) / (max - min)) * 100;
@@ -133,12 +130,12 @@ function ContinuousRange({ min, max }: { min: number; max: number }) {
 
     setSelectedRange((prev) => {
       if (type === 'min') {
-        const nextMin = Math.min(value, prev.max - minGap);
+        const nextMin = Math.min(value, prev.max);
         if (nextMin === prev.min) return prev;
         return { ...prev, min: nextMin };
       }
 
-      const nextMax = Math.max(value, prev.min + minGap);
+      const nextMax = Math.max(value, prev.min);
       if (nextMax === prev.max) return prev;
       return { ...prev, max: nextMax };
     });
@@ -151,7 +148,7 @@ function ContinuousRange({ min, max }: { min: number; max: number }) {
         label='Minimum'
         value={selectedRange.min}
         min={min}
-        max={selectedRange.max - minGap}
+        max={selectedRange.max}
         onChange={handleChange}
       />
       <div
@@ -172,7 +169,7 @@ function ContinuousRange({ min, max }: { min: number; max: number }) {
         id='max'
         label='Maximum'
         value={selectedRange.max}
-        min={selectedRange.min + minGap}
+        min={selectedRange.min}
         max={max}
         onChange={handleChange}
       />
