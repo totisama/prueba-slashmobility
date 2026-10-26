@@ -6,13 +6,13 @@ import { RangeStatus } from '@/components/RangeStatus/RangeStatus';
 import { loadRangeLimits } from '@/lib/range-api';
 
 async function RangeLimits() {
-  const limits = await loadRangeLimits();
+  const result = await loadRangeLimits();
 
-  if (!limits) {
+  if (result.error) {
     return (
       <RangeStatus
         variant='error'
-        message='Unable to load the range limits.'
+        message='Unable to load the range limits. Please try again.'
       />
     );
   }
@@ -20,8 +20,8 @@ async function RangeLimits() {
   return (
     <Range
       mode='continuous'
-      min={limits.min}
-      max={limits.max}
+      min={result.data.min}
+      max={result.data.max}
     />
   );
 }

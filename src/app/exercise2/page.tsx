@@ -6,13 +6,13 @@ import { RangeStatus } from '@/components/RangeStatus/RangeStatus';
 import { loadRangeValues } from '@/lib/range-api';
 
 async function RangeValues() {
-  const values = await loadRangeValues();
+  const result = await loadRangeValues();
 
-  if (!values) {
+  if (result.error) {
     return (
       <RangeStatus
         variant='error'
-        message='Unable to load the range values.'
+        message='Unable to load the range values. Please try again.'
       />
     );
   }
@@ -20,7 +20,7 @@ async function RangeValues() {
   return (
     <Range
       mode='fixed'
-      values={values}
+      values={result.data}
     />
   );
 }
