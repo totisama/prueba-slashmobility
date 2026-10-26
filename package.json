@@ -2,6 +2,9 @@
   "name": "prueba-slashmobility",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22.22.2"
+  },
   "scripts": {
     "dev": "next dev --port 8080",
     "build": "next build",

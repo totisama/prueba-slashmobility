@@ -11,7 +11,7 @@ Repository: [github.com/totisama/prueba-slashmobility](https://github.com/totisa
 
 ## Requirements
 
-- Node.js 22 or later
+- Node.js 22.22.2 or later
 - pnpm
 
 ## Installation and development
