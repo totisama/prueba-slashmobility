@@ -142,6 +142,7 @@ describe('Range', () => {
 
       fireEvent.keyDown(minimum, { key: 'ArrowRight' });
       expect(minimum.getAttribute('aria-valuenow')).toBe('5.99');
+      expect(minimum.getAttribute('aria-valuetext')).toBe('5.99 euros');
 
       fireEvent.keyDown(maximum, { key: 'Home' });
       expect(maximum.getAttribute('aria-valuenow')).toBe('5.99');

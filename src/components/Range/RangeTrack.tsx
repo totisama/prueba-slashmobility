@@ -8,6 +8,7 @@ type HandleDetails = {
   min: number;
   max: number;
   value: number;
+  valueText?: string;
   position: number;
 };
 

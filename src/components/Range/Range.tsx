@@ -89,6 +89,7 @@ function FixedRange({ values }: { values: number[] }) {
           min: values[0],
           max: values[selectedRange.max],
           value: values[selectedRange.min],
+          valueText: `${values[selectedRange.min]} euros`,
           position: minPosition,
         }}
         maxHandle={{
@@ -96,6 +97,7 @@ function FixedRange({ values }: { values: number[] }) {
           min: values[selectedRange.min],
           max: values.at(-1)!,
           value: values[selectedRange.max],
+          valueText: `${values[selectedRange.max]} euros`,
           position: maxPosition,
         }}
         onMove={handleMove}

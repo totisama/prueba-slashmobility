@@ -6,6 +6,7 @@ export function RangeHandle({
   min,
   max,
   value,
+  valueText,
   position,
   onMove,
   onKeyDown,
@@ -14,6 +15,7 @@ export function RangeHandle({
   min: number;
   max: number;
   value: number;
+  valueText?: string;
   position: number;
   onMove: (pointerX: number) => void;
   onKeyDown: (event: KeyboardEvent<HTMLSpanElement>) => void;
@@ -28,6 +30,7 @@ export function RangeHandle({
       aria-valuemin={min}
       aria-valuemax={max}
       aria-valuenow={value}
+      aria-valuetext={valueText}
       onPointerDown={(event) => {
         event.currentTarget.setPointerCapture(event.pointerId);
       }}
